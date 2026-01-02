@@ -208,3 +208,55 @@ function scrollToProjects() {
     const projectsSection = document.getElementById('projects');
     projectsSection.scrollIntoView({ behavior: 'smooth' });
 }
+// ===============================
+// Project Search & Category Filter
+// ===============================
+
+const searchInput = document.getElementById("project-search");
+const filterButtons = document.querySelectorAll(".filter-btn");
+const projectCards = document.querySelectorAll(".projects-container .card");
+
+let activeCategory = "all";
+
+// Filter function
+function filterProjects() {
+    const searchText = searchInput.value.toLowerCase();
+
+    projectCards.forEach(card => {
+        const title = card.querySelector(".card-heading").textContent.toLowerCase();
+        const category = card.getAttribute("data-category");
+
+        const matchesSearch = title.includes(searchText);
+        const matchesCategory = activeCategory === "all" || category === activeCategory;
+
+        if (matchesSearch && matchesCategory) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+
+// Search input event
+searchInput.addEventListener("input", () => {
+    filterProjects();
+});
+
+// Category button events
+filterButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        filterButtons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+
+        activeCategory = button.getAttribute("data-filter");
+        filterProjects();
+    });
+});
+
+// Mobile Navbar Toggle
+const navToggle = document.querySelector('.nav-toggle');
+const navLinks = document.querySelector('.nav-links');
+
+navToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+});
