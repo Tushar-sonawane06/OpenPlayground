@@ -2,18 +2,24 @@
 // OpenPlayground - Main JavaScript
 // ===============================
 
+// This file controls core UI behavior such as theme switching,
+// project rendering, filtering, sorting, pagination, and contributor display.
+
 // ===============================
 // Theme Toggle
 // ===============================
+
+// Elements related to theme toggle (light/dark mode)
 const toggleBtn = document.getElementById("toggle-mode-btn");
 const themeIcon = document.getElementById("theme-icon");
 const html = document.documentElement;
 
-// Load saved theme or default to light
+// Load previously saved theme from localStorage or default to light theme
 const savedTheme = localStorage.getItem("theme") || "light";
 html.setAttribute("data-theme", savedTheme);
 updateThemeIcon(savedTheme);
 
+// Updates the project count displayed on category filter buttons
 function updateCategoryCounts() {
     const counts = {};
 
@@ -32,6 +38,7 @@ function updateCategoryCounts() {
     });
 }
 
+// Toggle between light and dark theme when the user clicks the theme button
 toggleBtn.addEventListener("click", () => {
   const newTheme =
     html.getAttribute("data-theme") === "light" ? "dark" : "light";
@@ -44,6 +51,7 @@ toggleBtn.addEventListener("click", () => {
   setTimeout(() => toggleBtn.classList.remove("shake"), 500);
 });
 
+// Updates the theme icon based on the currently active theme
 function updateThemeIcon(theme) {
   if (theme === "dark") {
     themeIcon.className = "ri-moon-fill";
@@ -55,12 +63,16 @@ function updateThemeIcon(theme) {
 // ===============================
 // Scroll to Top
 // ===============================
+
+// Button used to scroll back to the top of the page
 const scrollBtn = document.getElementById("scrollToTopBtn");
 
+// Show or hide the scroll-to-top button based on scroll position
 window.addEventListener("scroll", () => {
   scrollBtn.classList.toggle("show", window.scrollY > 300);
 });
 
+// Smoothly scroll to the top when the button is clicked
 scrollBtn.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
@@ -68,11 +80,14 @@ scrollBtn.addEventListener("click", () => {
 // ===============================
 // Mobile Navbar
 // ===============================
+
+// Mobile navigation toggle elements
 const navToggle = document.getElementById("navToggle");
 const navLinks = document.getElementById("navLinks");
 
 if (navToggle && navLinks) {
-  navToggle.addEventListener("click", () => {
+    // Toggle mobile navigation menu and update menu icon
+    navToggle.addEventListener("click", () => {
     navLinks.classList.toggle("active");
 
     // Toggle icon
@@ -84,7 +99,7 @@ if (navToggle && navLinks) {
     }
   });
 
-  // Close menu when clicking a link
+  // Close mobile menu when a navigation link is clicked
   navLinks.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
       navLinks.classList.remove("active");
@@ -96,10 +111,16 @@ if (navToggle && navLinks) {
 // ===============================
 // Projects Logic
 // ===============================
+
+// Number of project cards displayed per page
 const itemsPerPage = 9;
+// Tracks the current page number for pagination
 let currentPage = 1;
+// Stores the currently selected project category filter
 let currentCategory = "all";
+// Stores the currently selected sorting option
 let currentSort = "default";
+// Holds all project data fetched from the projects.json file
 let allProjectsData = [];
 
 const searchInput = document.getElementById("project-search");
@@ -108,6 +129,7 @@ const filterBtns = document.querySelectorAll(".filter-btn");
 
 const clearBtn = document.getElementById("clear-filters");
 
+// Reset all filters, search input, and pagination when clear button is clicked
 if (clearBtn) {
     clearBtn.addEventListener("click", () => {
         searchInput.value = "";
@@ -127,9 +149,12 @@ const projectsContainer = document.querySelector(".projects-container");
 const paginationContainer = document.getElementById("pagination-controls");
 
 const allCards = Array.from(document.querySelectorAll(".card"));
+
 // ===============================
 // Add GitHub link button to cards
 // ===============================
+
+// Dynamically add GitHub repository links to project cards
 allCards.forEach(card => {
     const githubUrl = card.dataset.github;
     if (!githubUrl) return;
@@ -141,14 +166,14 @@ allCards.forEach(card => {
     githubBtn.className = "github-link";
     githubBtn.innerHTML = `<i class="ri-github-fill"></i>`;
 
-    // Prevent card click when clicking GitHub button
+    // Prevent card navigation when clicking the GitHub button
     githubBtn.addEventListener("click", e => e.stopPropagation());
 
     card.style.position = "relative";
     card.appendChild(githubBtn);
 });
 
-// Fetch Projects from JSON
+// Fetch project data from projects.json and initialize project rendering
 async function fetchProjects() {
   try {
     const response = await fetch("./projects.json");
@@ -163,6 +188,7 @@ async function fetchProjects() {
 
     renderProjects();
   } catch (error) {
+    // Display a fallback message if project data fails to load
     console.error("Error loading projects:", error);
     if (projectsContainer) {
       projectsContainer.innerHTML = `
@@ -201,13 +227,14 @@ filterBtns.forEach((btn) => {
   });
 });
 
-// Core Render Function
+// Render project cards based on search text, category filter, sorting option,
+// and pagination state
 function renderProjects() {
   if (!projectsContainer) return;
 
   let filteredProjects = [...allProjectsData];
 
-  // Search filter
+  // Filter projects based on search input (title or description)
   const searchText = searchInput?.value.toLowerCase() || "";
   if (searchText) {
     filteredProjects = filteredProjects.filter(
@@ -217,14 +244,14 @@ function renderProjects() {
     );
   }
 
-  // Category filter
+  // Filter projects based on selected category
   if (currentCategory !== "all") {
     filteredProjects = filteredProjects.filter(
       (project) => project.category === currentCategory
     );
   }
 
-  // Sort
+  // Sort projects according to the selected sorting option
   switch (currentSort) {
     case "az":
       filteredProjects.sort((a, b) => a.title.localeCompare(b.title));
@@ -237,13 +264,13 @@ function renderProjects() {
       break;
   }
 
-  // Pagination
+  // Calculate pagination values and slice project list accordingly
   const totalItems = filteredProjects.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const start = (currentPage - 1) * itemsPerPage;
   const paginatedItems = filteredProjects.slice(start, start + itemsPerPage);
 
-  // Clear container
+  // Display empty state message if no projects match the criteria
   projectsContainer.innerHTML = "";
 
   if (paginatedItems.length === 0) {
@@ -304,9 +331,11 @@ function renderProjects() {
     }, index * 50);
   });
 
+  // Render pagination controls and handle page navigation
   renderPagination(totalPages);
 }
 
+// Capitalize the first letter of a given string
 function capitalize(str) {
   if (!str) return "";
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -315,6 +344,7 @@ function capitalize(str) {
 // ===============================
 // Pagination
 // ===============================
+
 function renderPagination(totalPages) {
   if (!paginationContainer) return;
 
@@ -330,7 +360,7 @@ function renderPagination(totalPages) {
     return btn;
   };
 
-  // Previous button
+  // Create previous page navigation button
   paginationContainer.appendChild(
     createBtn('<i class="ri-arrow-left-s-line"></i>', currentPage === 1, () => {
       currentPage--;
@@ -397,7 +427,7 @@ function renderPagination(totalPages) {
     );
   }
 
-  // Next button
+  // Create next page navigation button
   paginationContainer.appendChild(
     createBtn(
       '<i class="ri-arrow-right-s-line"></i>',
@@ -421,6 +451,7 @@ function scrollToProjects() {
 // ===============================
 // Init
 // ===============================
+
 updateCategoryCounts();
 renderProjects();
 
@@ -433,8 +464,10 @@ console.log(
 // ===============================
 // Hall of Contributors Logic
 // ===============================
+
 const contributorsGrid = document.getElementById("contributors-grid");
 
+// Fetch GitHub contributors and display them in the contributors section
 async function fetchContributors() {
   if (!contributorsGrid) return;
 
@@ -481,6 +514,7 @@ async function fetchContributors() {
       }, index * 30);
     });
   } catch (error) {
+    // Show fallback message if contributors cannot be loaded
     console.error("Error fetching contributors:", error);
     contributorsGrid.innerHTML = `
             <div class="loading-msg">
@@ -498,8 +532,10 @@ async function fetchContributors() {
 // ===============================
 // Smooth Scroll for Anchor Links
 // ===============================
+
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-  anchor.addEventListener("click", function (e) {
+  // Enable smooth scrolling behavior for internal anchor links
+    anchor.addEventListener("click", function (e) {
     const targetId = this.getAttribute("href");
     if (targetId === "#") return;
 
@@ -517,6 +553,8 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 // ===============================
 // Initialize
 // ===============================
+
+// Initialize project data and contributor list on page load
 fetchProjects();
 fetchContributors();
 
