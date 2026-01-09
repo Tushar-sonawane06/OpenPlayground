@@ -1,5 +1,18 @@
 [
   {
+    "title": "Interactive Road Safety Quiz",
+    "category": "education",
+    "description": "An engaging quiz platform testing knowledge of road safety rules, traffic signs, and safe driving practices with multiple difficulty levels and instant feedback.",
+    "tech": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "link": "./projects/RoadSafetyQuiz/index.html",
+    "icon": "ri-steering-2-line",
+    "coverClass": "safety-quiz-cover"
+  },
+  {
     "title": "Image Preview Uploader",
     "category": "utility",
     "description": "Preview and validate images before upload with drag and drop support.",
