@@ -42,6 +42,19 @@
     "coverStyle": "background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white;"
   },
   {
+    "title": "Dictonary App",
+    "category": "productivity",
+    "description": "A sleek dictionary application that fetches word definitions, synonyms, and pronunciation using a public API, with a user-friendly interface and search history feature.",
+    "tech": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "link": "./projects/dictonary-app/index.html",
+    "icon": "ri-booklet-line",
+    "coverStyle": "background: linear-gradient(135deg, #a3d9b1 0%, #7bc8a6 100%); color: white;"
+  },
+  {
     "title": "Mindful Breathing Exercise",
     "category": "productivity",
     "description": "Interactive breathing exercise interface with guided patterns, visual animations, and session tracking for relaxation and mindfulness.",
