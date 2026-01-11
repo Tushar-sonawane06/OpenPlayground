@@ -2364,5 +2364,18 @@
     "link": "./projects/Typing_Heatmap/index.html",
     "icon": "ri-fire-line",
     "coverStyle": "background: linear-gradient(135deg, #eff6ff 0%, #3b82f6 100%); color: #1e3a8a;"
+  },
+    {
+    "title": "Quantum Dice Roller",
+    "category": "utility",
+    "description": "Explore probability with quantum-entangled dice. When dice are entangled, their outcomes become correlated!",
+    "tech": [
+      "HTML",
+      "CSS",
+      "JS"
+    ],
+    "link": "./projects/QuantumDiceRoller/index.html",
+    "icon": "ri-dice-line",
+    "coverStyle": "background: #1e40af; color: white;"
   }
 ]
