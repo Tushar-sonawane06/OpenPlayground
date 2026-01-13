@@ -2631,6 +2631,19 @@
     "link": "./projects/MiniCodeEditor/index.html",
     "icon": "ri-terminal-box-line",
     "coverStyle": "background: #1e1e1e; color: #4fc3f7;"
-  }
+  },
+    {
+"title": "Binary Brain - Guess the Number",
+"category": "utility",
+"description": "Visual demonstration of binary search algorithm. User guesses a number while computer shows binary search efficiency.",
+"tech": [
+"HTML",
+"CSS",
+"JS"
+],
+"link": "./projects/BinaryBrainGame/index.html",
+"icon": "ri-brain-line",
+"coverStyle": "background: linear-gradient(135deg, #ff6b6b 0%, #ffa726 100%); color: white;"
+}
 
 ]
