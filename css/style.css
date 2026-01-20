@@ -2483,7 +2483,6 @@ html[data-theme="dark"] .contribute-highlight {
 .footer-nav {
   display: flex;
   gap: var(--space-6);
-  margin-top: var(--space-2);
 }
 
 .footer-nav a {
